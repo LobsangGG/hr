@@ -1,0 +1,30 @@
+# Common definitions
+CC = mpicc
+
+# Compiler flags, paths and libraries
+CFLAGS = -std=c11 -fopenmp -pedantic -Wall -Wextra -O3 -ggdb -gdwarf-4
+LFLAGS = $(CFLAGS)
+LIBS   = -lm
+
+TGTS = partdiff.x
+OBJS = partdiff.o askparams.o displaymatrix-mpi.o
+
+# Targets ...
+all: $(TGTS)
+
+partdiff.x: $(OBJS) Makefile
+	$(CC) $(LFLAGS) -o $@ $(OBJS) $(LIBS)
+
+partdiff.o: partdiff.c Makefile
+
+displaymatrix-mpi.o: displaymatrix-mpi.c Makefile
+
+askparams.o: askparams.c Makefile
+
+# Rule to create *.o from *.c
+%.o: %.c
+	$(CC) -c $(CFLAGS) $*.c
+
+clean:
+	$(RM) $(OBJS)
+	$(RM) $(TGTS)
